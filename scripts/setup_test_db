@@ -3,4 +3,4 @@ set -ev
 
 # This creates the pollinate test DB
 dropdb --if-exists challenge_test
-RAILS_ENV=test bundle exec rake db:create db:migrate
+RAILS_ENV=test bundle exec rake db:create db:migrate db:seed

@@ -21,7 +21,7 @@ function App() {
   );
   const [perPage] = useQueryParam(
     'perPage',
-    withDefault(NumberParam, 25)
+    withDefault(NumberParam, 5)
   );
   const [showAddModal, setShowAddModal] = useState(false)
   const [focusedSubscriberId, setFocusedSubscriberId] = useState('')
@@ -71,6 +71,7 @@ function App() {
   }
 
   const onSuccessAddSubscriber = () => {
+    refreshSubscribers()
     setShowAddModal(false)
   }
 
@@ -85,6 +86,7 @@ function App() {
   }
 
   const onSuccessUpdateStatusSubscriber = () => {
+    refreshSubscribers()
     setFocusedSubscriberId('')
     setFocusedSubscriberStatus('')
   }

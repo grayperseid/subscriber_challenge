@@ -11,6 +11,7 @@ import { updateSubscriber } from "../../services/subscriber";
 const SubscriberStatusModal = (props) => {
   const { isOpen, onSuccess, onClose, subscriberId, status } = props;
   const [isDeleting, setIsDeleting] = useState(false)
+  const [error, setError] = useState('')
 
   const onUpdate = () => {
     const payload = {
@@ -23,26 +24,29 @@ const SubscriberStatusModal = (props) => {
       onSuccess()
     })
     .catch((payload) => {
-      const error = payload?.response?.data?.message || 'Something went wrong'
-      console.error(error)
+      const error = payload?.response?.data?.message || 'Unable to update subscriber, please try again.'
+      setError(error)
     })
     .finally(() => {
       setIsDeleting(false)
     })
   }
 
-  const modalTitleText = status === 'active' ? 
+  const modalTitleText = status === 'active' ?
     "Unsubscribe" : "Resubscribe"
-  const messageBodyText = status === 'active' ? 
+  const messageBodyText = status === 'active' ?
     "Are you sure you'd like to unsubscribe this subscriber?" :
     "Are you sure you'd like to resubscribe this subscriber?"
-  const buttonText = status === 'active' ? 
+  const buttonText = status === 'active' ?
     "Unsubscribe" : "Resubscribe"
 
   return (
     <Modal modalTitle={modalTitleText} showModal={isOpen} onCloseModal={onClose}>
       <>
         <ModalBody>
+          { error &&
+            <div style={{color: 'red'}}>{error}</div>
+          }
           {messageBodyText}
         </ModalBody>
         <ModalFooter>

@@ -26,6 +26,26 @@ RSpec.describe SubscribersController, type: :controller do
       json = JSON.parse(response.body, symbolize_names: true)
       expect(json[:message]).to eq "Subscriber created successfully"
     end
+
+    it "returns 422 if the user inputs an invalid email" do
+      post :create, params: {email: "mrjohn.com", name: "John Smith"}, format: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.content_type).to eq("application/json; charset=utf-8")
+
+      json = JSON.parse(response.body, symbolize_names: true)
+      expect(json[:message]).to eq "Email is invalid"
+    end
+
+    it "returns 422 if the user inputs an email that currently exists" do
+      post :create, params: {email: "andris@beehiiv.com", name: "Andris Caelia"}, format: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.content_type).to eq("application/json; charset=utf-8")
+
+      json = JSON.parse(response.body, symbolize_names: true)
+      expect(json[:message]).to eq "Email has already been taken"
+    end
   end
 
   describe "PATCH /subscribers/:id" do
